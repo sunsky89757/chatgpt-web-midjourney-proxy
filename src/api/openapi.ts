@@ -20,11 +20,17 @@ export const KnowledgeCutOffDate: Record<string, string> = {
   "gpt-4-0125-preview": "2023-12",
   "gpt-4-vision-preview": "2023-04",
   "gpt-4-turbo-2024-04-09": "2023-12", 
+  "gpt-4o-2024-05-13": "2023-12", 
+  "gpt-4o": "2023-12", 
   "gpt-4-turbo": "2023-12",
+  //gpt-4-turbo-2024-04-09
   "gpt-4-turbo-preview": "2023-12",
   "claude-3-opus-20240229": "2023-08",
   "claude-3-sonnet-20240229": "2023-08",
-  "claude-3-haiku-20240229": "2023-08",
+  "claude-3-haiku-20240307": "2023-08",
+  "gemini-pro": "2023-12",
+  "gemini-pro-vision": "2023-12",
+  "gemini-pro-1.5": "2024-04"
 };
 
 const getUrl=(url:string)=>{
@@ -263,9 +269,10 @@ export const getSystemMessage = (uuid?:number )=>{
     if(  sysTem ) return sysTem;
     let model= gptConfigStore.myData.model?gptConfigStore.myData.model: "gpt-3.5-turbo";
     let producer= 'You are ChatGPT, a large language model trained by OpenAI.'
-    if(model.includes('claude-3')) producer=  'You are Claude, a large language model trained by Anthropic.';
+    if(model.includes('claude')) producer=  'You are Claude, a large language model trained by Anthropic.';
+    if(model.includes('gemini')) producer=  'You are Gemini, a large language model trained by Google.';
       const DEFAULT_SYSTEM_TEMPLATE = `${producer}
-Knowledge cutoff: ${KnowledgeCutOffDate[model]}
+Knowledge cutoff: ${KnowledgeCutOffDate[model]??KnowledgeCutOffDate.default}
 Current model: ${model}
 Current time: ${ new Date().toLocaleString()}
 Latex inline: $x^2$
@@ -496,7 +503,7 @@ const getModelMax=( model:string )=>{
         return 16;
     }else if( model.indexOf('32k')>-1  ){
         return 32;
-    }else if( model.indexOf('gpt-4-turbo')>-1  ){
+    }else if( model.indexOf('gpt-4-turbo')>-1||  model.indexOf('gpt-4o')>-1 ){
         return 128; 
     }else if( model.indexOf('64k')>-1  ){
         return 64;
@@ -560,4 +567,10 @@ export const getHistoryMessage= async (dataSources:Chat.Chat[],loadingCnt=1 ,sta
     rz.reverse();
     mlog('rz',rz);
     return rz ;
+}
+
+
+export const isDisableMenu=(menu:string)=>{
+
+ return (homeStore.myData.session  && homeStore.myData.session.menuDisable && homeStore.myData.session.menuDisable.indexOf( menu)>-1 )
 }
