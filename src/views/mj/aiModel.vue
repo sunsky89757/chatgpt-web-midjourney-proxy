@@ -37,6 +37,7 @@ model:[
 			'gemini-pro',
 			'gemini-pro-vision',
             'suno-v3',
+            'suno-v3.5',
             'llama3-70b',
             'kokomi'
 			],
