@@ -39,7 +39,8 @@ model:[
             'suno-v3',
             'suno-v3.5',
             'llama3-70b',
-            'kokomi'
+            'kokomi',
+            'luma-video'
 			],
 			maxToken:4096
 }); 
